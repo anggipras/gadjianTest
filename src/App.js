@@ -1,25 +1,28 @@
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+import Header from './components/Header'
+import SideMenu from './components/Sidemenu'
+import DataCard from './pages/PersonnelCard'
+import {connect} from 'react-redux'
+import {getAllData, noReload} from './redux/actions'
 
-function App() {
+function App(props) {
+  useEffect(()=> {
+    let theusers = JSON.parse(localStorage.getItem('userdata'))
+    if(theusers) {
+      props.noReload(theusers)
+    } else {
+      props.getAllData()
+    }
+  },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="thebody">
+      <Header />
+      <SideMenu />
+      <DataCard />
     </div>
   );
 }
 
-export default App;
+export default connect(null,{getAllData, noReload}) (App);
